@@ -1,0 +1,18 @@
+# Ne pas inclure l'environnement virtuel
+venv/
+
+# Fichiers système / éditeur
+.DS_Store
+__pycache__/
+*.pyc
+
+# Fichiers de logs
+*.log
+
+# Données de sortie ou temporaires
+uploads/
+outputs/
+
+# Environnement / dépendances spécifiques
+.env
+

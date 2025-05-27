@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PEASYV - YouTube Aligner</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f3f6fb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 0.7rem 1.5rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .spinner {
+      display: none;
+      margin: 1rem 0;
+    }
+
+    .spinner div {
+      width: 16px;
+      height: 16px;
+      margin: 0 4px;
+      background-color: #007bff;
+      border-radius: 100%;
+      display: inline-block;
+      animation: bouncedelay 1.4s infinite ease-in-out both;
+    }
+
+    .spinner div:nth-child(1) { animation-delay: -0.32s; }
+    .spinner div:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bouncedelay {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1.0); }
+    }
+
+    .authors {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+    }
+
+    .download-section, .metrics-section {
+      margin-top: 1.5rem;
+    }
+
+    .download-section a {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .metrics-section pre {
+      text-align: left;
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>PEASYV: YouTube ➔ TextGrid</h2>
+
+    <form method="POST" id="alignForm">
+      <input type="text" name="video_url" placeholder="Paste a YouTube link..." required />
+      <button type="submit">Generate TextGrid</button>
+    </form>
+
+    <div class="spinner" id="spinner">
+      <div></div><div></div><div></div>
+    </div>
+
+    {% if download_ready %}
+    <div class="download-section">
+      <a href="{{ textgrid_url }}"><button type="button">⬇️ Download TextGrid</button></a>
+      <a href="{{ wav_url }}"><button type="button">🎵 Download Audio (WAV)</button></a>
+      <a href="{{ txt_url }}"><button type="button">📄 Download Transcript (TXT)</button></a>
+      <a href="{{ metrics_url }}"><button type="button">📈 Download Metrics (JSON)</button></a>
+    </div>
+
+    <div class="metrics-section">
+      <h3>Lexical Metrics:</h3>
+      <pre>
+Total Words: {{ metrics.total_words }}
+Unique Words: {{ metrics.unique_words }}
+Type-Token Ratio: {{ metrics.type_token_ratio }}
+
+Top Bigrams:
+{% for bigram in metrics.top_bigrams %}{{ bigram[0] }} {{ bigram[1] }} ({{ bigram[2] }})
+{% endfor %}
+
+Top Trigrams:
+{% for trigram in metrics.top_trigrams %}{{ trigram[0] }} {{ trigram[1] }} {{ trigram[2] }} ({{ trigram[3] }})
+{% endfor %}</pre>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="authors">
+    Authors: Ahmed Benlafqih, Oumaima Berkani, Rababe Zidani, Nissrine Elabjani
+    Code initial : Adrien Méli (<a href="https://credit.niso.org/contributor-roles/software/" target="_blank">Crédits NISO</a>)
+  </div>
+
+  <div class="article">
+    Article PEASYV: <a href="#" target="_blank">Lien vers l'article</a>
+  </div>
+
+  <script>
+    const form = document.getElementById("alignForm");
+    const spinner = document.getElementById("spinner");
+
+    form.addEventListener("submit", function () {
+      spinner.style.display = "block";
+    });
+  </script>
+</body>
+</html>

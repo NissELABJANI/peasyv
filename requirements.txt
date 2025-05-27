@@ -1,0 +1,8 @@
+flask
+numpy
+openai-whisper
+praat-parselmouth
+praat-textgrids
+yt-dlp
+montreal-forced-aligner==3.2.2
+
