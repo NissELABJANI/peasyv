@@ -33,7 +33,8 @@ RUN pip install --no-cache-dir flask webvtt-py nltk
 RUN python3 -m nltk.downloader punkt
 
 # Installer yt-dlp
-RUN chmod +x /app/yt-dlp && ln -s /app/yt-dlp /usr/local/bin/yt-dlp
+RUN pip install yt-dlp
+
 
 # Compilation de HTK
 RUN tar -xvzf HTK-3.4.tar.gz -C /tmp && \
